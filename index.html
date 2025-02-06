@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de Certificado</title>
+    <script>
+        async function verificarCertificado() {
+            let codigo = document.getElementById("codigo").value;
+            let resultado = document.getElementById("resultado");
+
+            // Substitua com seu banco de dados ou planilha pública
+            let url = `https://api.sheetdb.io/v1/YOUR_SHEETDB_ID/search?codigo=${codigo}`;
+
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+
+                if (data.length > 0) {
+                    resultado.innerHTML = `<p><b>Certificado válido!</b></p>
+                    <p>Nome: ${data[0].nome}</p>
+                    <p>Curso: ${data[0].curso}</p>
+                    <p>Data de Emissão: ${data[0].data}</p>
+                    <a href="${data[0].url}" target="_blank">Ver Certificado</a>`;
+                } else {
+                    resultado.innerHTML = `<p style="color: red;">Código inválido!</p>`;
+                }
+            } catch (error) {
+                resultado.innerHTML = `<p style="color: red;">Erro ao verificar certificado.</p>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Verifique seu Certificado</h2>
+    <input type="text" id="codigo" placeholder="Digite o código do certificado">
+    <button onclick="verificarCertificado()">Verificar</button>
+    <div id="resultado"></div>
+</body>
+</html>
