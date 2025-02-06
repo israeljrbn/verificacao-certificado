@@ -9,24 +9,27 @@
             let codigo = document.getElementById("codigo").value;
             let resultado = document.getElementById("resultado");
 
-            // Substitua com seu banco de dados ou planilha pública
-            let url = `https://api.sheetdb.io/v1/YOUR_SHEETDB_ID/search?codigo=${codigo}`;
+            // URL do JSON armazenado no GitHub
+            let url = "https://raw.githubusercontent.com/israeljrbn/verificacao-certificado/main/certificados.json";
 
             try {
                 let response = await fetch(url);
                 let data = await response.json();
 
-                if (data.length > 0) {
-                    resultado.innerHTML = `<p><b>Certificado válido!</b></p>
-                    <p>Nome: ${data[0].nome}</p>
-                    <p>Curso: ${data[0].curso}</p>
-                    <p>Data de Emissão: ${data[0].data}</p>
-                    <a href="${data[0].url}" target="_blank">Ver Certificado</a>`;
+                // Buscar o certificado correspondente ao código inserido
+                let certificado = data.find(item => item.codigo === codigo);
+
+                if (certificado) {
+                    resultado.innerHTML = `<p><b>✅ Certificado válido!</b></p>
+                    <p><b>Nome:</b> ${certificado.nome}</p>
+                    <p><b>Curso:</b> ${certificado.curso}</p>
+                    <p><b>Data de Emissão:</b> ${certificado.data}</p>
+                    <a href="${certificado.url}" target="_blank">📜 Ver Certificado</a>`;
                 } else {
-                    resultado.innerHTML = `<p style="color: red;">Código inválido!</p>`;
+                    resultado.innerHTML = `<p style="color: red;">❌ Código inválido!</p>`;
                 }
             } catch (error) {
-                resultado.innerHTML = `<p style="color: red;">Erro ao verificar certificado.</p>`;
+                resultado.innerHTML = `<p style="color: red;">⚠️ Erro ao verificar certificado.</p>`;
             }
         }
     </script>
